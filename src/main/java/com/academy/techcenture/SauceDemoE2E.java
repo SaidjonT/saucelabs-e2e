@@ -7,10 +7,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.awt.*;
 import java.time.Duration;
+import java.util.List;
 
 public class SauceDemoE2E {
 
@@ -78,15 +80,72 @@ public class SauceDemoE2E {
             System.out.println("Title is NOT displayed");
         }
 
+        // 8. Click on Menu on Top Left
+
+        WebElement menuBtn = driver.findElement(By.id("react-burger-menu-btn"));
+        menuBtn.click();
+
+        // 9. Verify there are 4 links: All items, About, Logout and Reset App State
+
+        List<WebElement> menuElements = driver.findElements(By.xpath("//a@[class='bm-item menu-item']"));
+        String[] menuOptions = {"all items", "about", "logout", "reset app state"};
+
+
+                for (int i = 0; i < menuElements.size(); i++) {
+                    boolean menuItemCorrect = menuElements.get(i).getText().trim().toLowerCase().equals(menuOptions[i]);
+                    if (!menuItemCorrect) {
+                        System.out.println("Incorrect menu item: " + menuOptions[i]);
+                    }
+        }
+        //  10. Click on about link (this will take the driver to another page)
+            WebElement aboutMenuLink = driver.findElement(By.id("about_sidebar_link"));
+            aboutMenuLink.click();
+
+
+        driver.navigate().back();
+
+        WebElement closeMenu = driver.findElement(By.id("react-burger-cross-btn"));
+        if (closeMenu.isDisplayed()) {
+            closeMenu.click();
+        }
+
+        List<WebElement> items = driver.findElements(By.xpath("//div[@class='inventory_list_name']"));
+        if (items.size() == 6) {
+            System.out.println("Number of items: " + items.size() + " should be 6");
+        }
+
+        WebElement filterBtn = driver.findElement(By.xpath("//select[@class='product_sort_container']"));
+
+        Select select = new Select(filterBtn);
+        select.selectByValue("lohi");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
        /*
 
 
-        8. Click on Menu on Top left
-        9. Verify there are 4 links: All items, About, Logout and Reset App State
-        10. Click on about link (this will take the driver to another page)
+
+
         11. Verify the title of the new tab is “Cross Browser Testing, Selenium Testing, Mobile Testing | Sauce Labs”
         12. Come back to previous page
         13. Close the menu panel
